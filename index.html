@@ -1,0 +1,508 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>💌</title>
+
+  <style>
+    :root{
+      --bg1:#0b0b10;
+      --bg2:#161428;
+
+      --card1: rgba(255,255,255,.12);
+      --card2: rgba(255,255,255,.07);
+      --border: rgba(255,255,255,.18);
+
+      --text: #f7f6ff;
+      --muted: rgba(255,255,255,.78);
+
+      --btn: #ffffff;
+      --btnText:#15121f;
+
+      --btnSoft: rgba(255,255,255,.12);
+      --btnSoftText:#f7f6ff;
+
+      --shadow: 0 18px 70px rgba(0,0,0,.50);
+    }
+
+    *{ box-sizing:border-box; }
+
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Helvetica Neue";
+      color:var(--text);
+      background:
+        radial-gradient(1100px 700px at 20% 10%, rgba(255,150,210,.16) 0%, transparent 60%),
+        radial-gradient(1000px 700px at 80% 18%, rgba(150,210,255,.12) 0%, transparent 60%),
+        radial-gradient(900px 650px at 55% 85%, rgba(255,235,170,.10) 0%, transparent 62%),
+        linear-gradient(160deg, var(--bg1), var(--bg2));
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+      overflow:hidden;
+    }
+
+    .glow{
+      position:fixed;
+      inset:-220px;
+      background:
+        radial-gradient(420px 320px at 28% 30%, rgba(255,120,180,.12), transparent 60%),
+        radial-gradient(380px 280px at 72% 40%, rgba(140,200,255,.10), transparent 60%),
+        radial-gradient(360px 300px at 55% 78%, rgba(255,230,160,.08), transparent 62%);
+      filter: blur(12px);
+      pointer-events:none;
+      animation: drift 12s ease-in-out infinite alternate;
+    }
+    @keyframes drift{
+      from{ transform: translate3d(-12px,-10px,0) scale(1.02); }
+      to{ transform: translate3d(14px,12px,0) scale(1.04); }
+    }
+
+    .fx-layer{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:1;
+      overflow:hidden;
+    }
+    .heart{
+      position:absolute;
+      bottom:-30px;
+      font-size:18px;
+      opacity:0;
+      transform: translateY(0) translateX(0) scale(1);
+      animation: floatUp 1.9s ease-out forwards;
+      filter: drop-shadow(0 6px 18px rgba(0,0,0,.25));
+    }
+    @keyframes floatUp{
+      0%   { opacity:0; transform: translateY(0) translateX(0) scale(.9); }
+      12%  { opacity:1; }
+      100% { opacity:0; transform: translateY(-250px) translateX(var(--dx)) scale(1.25); }
+    }
+
+    .wrap{ width:min(760px, 100%); position:relative; z-index:2; }
+
+    .card{
+      background: linear-gradient(180deg, var(--card1), var(--card2));
+      border:1px solid var(--border);
+      border-radius:28px;
+      box-shadow: var(--shadow);
+      padding:28px;
+      backdrop-filter: blur(12px);
+      overflow:hidden;
+      position:relative;
+    }
+
+    .top{ display:flex; align-items:center; justify-content:center; margin-bottom:16px; }
+    .badge{
+      font-size:14px;
+      letter-spacing:.08em;
+      color: rgba(255,255,255,.88);
+      padding:8px 14px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.06);
+      user-select:none;
+    }
+
+    .stage{ position:relative; min-height:300px; }
+
+    .scene{
+      position:absolute;
+      inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      padding:16px 6px;
+      opacity:0;
+      transform: translateY(10px) scale(.99);
+      pointer-events:none;
+      transition: opacity .38s ease, transform .38s ease;
+    }
+    .scene.active{
+      opacity:1;
+      transform: translateY(0) scale(1);
+      pointer-events:auto;
+    }
+
+    h1{
+      margin:0 0 10px 0;
+      font-weight:780;
+      font-size: clamp(28px, 4vw, 42px);
+      line-height:1.12;
+      letter-spacing:-.02em;
+    }
+    p{
+      margin:0 0 18px 0;
+      color:var(--muted);
+      font-size: clamp(14px, 2.2vw, 16px);
+      line-height:1.5;
+    }
+
+    .btns{
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:center;
+      gap:12px;
+      margin-top:10px;
+    }
+    button{
+      border:none;
+      cursor:pointer;
+      border-radius:14px;
+      padding:12px 16px;
+      font-weight:750;
+      font-size:16px;
+      transition: transform .12s ease, filter .18s ease, background .18s ease, opacity .18s ease;
+      user-select:none;
+    }
+    button:active{ transform: scale(.98); }
+    button:hover{ filter: brightness(1.04); }
+
+    .primary{
+      background: var(--btn);
+      color: var(--btnText);
+      min-width: 170px;
+    }
+    .ghost{
+      background: var(--btnSoft);
+      color: var(--btnSoftText);
+      border:1px solid rgba(255,255,255,.18);
+      min-width: 170px;
+    }
+
+    .footer{
+      margin-top:16px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      color:rgba(255,255,255,.55);
+      font-size:12px;
+      user-select:none;
+    }
+    .progress{ display:flex; gap:8px; align-items:center; }
+    .dot{
+      width:9px;height:9px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.22);
+      background: rgba(255,255,255,.10);
+      transition: transform .18s ease, background .18s ease;
+    }
+    .dot.on{ background: rgba(255,255,255,.92); border-color: rgba(255,255,255,.0); transform: scale(1.08); }
+
+    @media (max-width: 520px){
+      .card{ padding:20px; border-radius:22px; }
+      button{ min-width: 150px; }
+      .stage{ min-height: 340px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="glow"></div>
+  <div class="fx-layer" id="fx"></div>
+
+  <div class="wrap">
+    <div class="card" role="application" aria-label="Нежный мини-сайт">
+      <div class="top">
+        <div class="badge">💌</div>
+      </div>
+
+      <div class="stage">
+        <!-- 1 -->
+        <section class="scene active" data-scene="1">
+          <div>
+            <h1 id="s1Title"></h1>
+            <p id="s1Text"></p>
+            <div class="btns">
+              <button class="primary" id="s1b1"></button>
+              <button class="ghost" id="s1b2"></button>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2 -->
+        <section class="scene" data-scene="2">
+          <div>
+            <h1 id="s2Title"></h1>
+            <p id="s2Text"></p>
+            <div class="btns">
+              <button class="primary" id="s2b1"></button>
+              <button class="ghost" id="s2b2"></button>
+            </div>
+          </div>
+        </section>
+
+        <!-- 3 -->
+        <section class="scene" data-scene="3">
+          <div>
+            <h1 id="s3Title"></h1>
+            <p id="s3Text"></p>
+            <div class="btns">
+              <button class="primary" id="s3b1"></button>
+              <button class="ghost" id="s3b2"></button>
+              <button class="ghost" id="s3b3"></button>
+            </div>
+          </div>
+        </section>
+
+        <!-- 4: choose activity -->
+        <section class="scene" data-scene="4">
+          <div>
+            <h1 id="s4Title"></h1>
+            <p id="s4Text"></p>
+            <div class="btns">
+              <button class="primary" id="s4b1"></button>
+              <button class="ghost" id="s4b2"></button>
+              <button class="ghost" id="s4b3"></button>
+            </div>
+          </div>
+        </section>
+
+        <!-- 5: final -->
+        <section class="scene" data-scene="5">
+          <div>
+            <h1 id="finalTitle"></h1>
+            <p id="finalText"></p>
+            <div class="btns">
+              <button class="primary" id="copyBtn">Скопировать</button>
+              <button class="ghost" id="restartBtn">Ещё раз</button>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="footer">
+        <div class="progress" aria-label="Прогресс">
+          <span class="dot on" data-dot="1"></span>
+          <span class="dot" data-dot="2"></span>
+          <span class="dot" data-dot="3"></span>
+          <span class="dot" data-dot="4"></span>
+          <span class="dot" data-dot="5"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // =============================
+    // CONFIG — меняешь тут всё
+    // =============================
+    const CONFIG = {
+      name: "Рина",
+
+      // scene 1
+      s1: {
+        title: (name) => `${name}… можно признаться?`,
+        text:  "Можно сказать кое-что важное?",
+        b1: { label: "Да",     next: 2 },
+        b2: { label: "Да 💗",  next: 2 }
+      },
+
+      // scene 2
+      s2: {
+        title: (name) => `${name}, ты мне правда нравишься.`,
+        text:  "Очень.",
+        b1: { label: "💗", next: 3 },
+        b2: { label: "💖", next: 3 }
+      },
+
+      // scene 3
+      s3: {
+        title: "Хочешь встретиться на неделе?",
+        text:  "Кофе или прогулка — как тебе комфортнее.",
+        b1: { label: "Да 💗", action: "goChoose" }, // ведёт на выбор формата
+        b2: { label: "Давай выберем день 💗", action: "goPickDayFinal" },
+        b3: { label: "Мне нужно время 🤍", action: "goSoftFinal" } // мягкий выход
+      },
+
+      // scene 4 (choose)
+      s4: {
+        title: "Тогда выбери формат 💗",
+        text:  "Что тебе ближе?",
+        b1: { label: "Кофе ☕",    pick: "coffee" },
+        b2: { label: "Прогулка 🌙", pick: "walk" },
+        b3: { label: "Кино 🎬",    pick: "cinema" }
+      },
+
+      // finals
+      finals: {
+        yes: {
+          title: (name) => `💗 ${name}…`,
+          text:  "Скопируй фразу и отправь мне. Это будет наш маленький секрет 💌",
+          copy:  (name) => `${name}, да 💗`
+        },
+        pickDay: {
+          title: (name) => `💗 ${name}…`,
+          text:  "Скопируй и отправь — выберем день спокойно и красиво 🤍",
+          copy:  (name) => `${name}, давай выберем день 💗`
+        },
+        soft: {
+          title: (name) => `🤍 ${name}`,
+          text:  "Спасибо за честность. Я просто рад(а), что сказал(а) тебе это.",
+          copy:  (name) => `${name}, спасибо… 🤍`
+        },
+        coffee: {
+          title: (name) => `💗 ${name}…`,
+          text:  "Скопируй и отправь — и я предложу пару вариантов времени 💌",
+          copy:  (name) => `${name}, давай кофе ☕💗`
+        },
+        walk: {
+          title: (name) => `💗 ${name}…`,
+          text:  "Скопируй и отправь — и я предложу пару вариантов времени 💌",
+          copy:  (name) => `${name}, давай прогулку 🌙💗`
+        },
+        cinema: {
+          title: (name) => `💗 ${name}…`,
+          text:  "Скопируй и отправь — и я предложу пару вариантов времени 💌",
+          copy:  (name) => `${name}, давай кино 🎬💗`
+        }
+      }
+    };
+
+    // =============================
+    // Helpers
+    // =============================
+    const $ = (id) => document.getElementById(id);
+    const scenes = [...document.querySelectorAll(".scene")];
+    const dots = [...document.querySelectorAll(".dot")];
+    const fxLayer = document.getElementById("fx");
+
+    let copyPayload = "";
+
+    function setActiveScene(id){
+      scenes.forEach(s => s.classList.toggle("active", s.dataset.scene === String(id)));
+      dots.forEach(d => d.classList.toggle("on", d.dataset.dot === String(id)));
+    }
+
+    function spawnHearts(count = 12){
+      const emojis = ["💗","💖","💘","💞","💓"];
+      for(let i=0;i<count;i++){
+        const el = document.createElement("div");
+        el.className = "heart";
+        el.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+        const x = Math.random() * 100;
+        const dx = (Math.random()*120 - 60).toFixed(0) + "px";
+        el.style.left = x + "vw";
+        el.style.setProperty("--dx", dx);
+        el.style.animationDuration = (1.6 + Math.random()*0.9).toFixed(2) + "s";
+        el.style.fontSize = (16 + Math.random()*10).toFixed(0) + "px";
+        fxLayer.appendChild(el);
+        el.addEventListener("animationend", () => el.remove());
+      }
+    }
+
+    document.addEventListener("click", (e) => {
+      const btn = e.target.closest("button");
+      if(!btn) return;
+      spawnHearts(10);
+    });
+
+    function goFinal(finalKey){
+      const f = CONFIG.finals[finalKey];
+      const name = CONFIG.name;
+
+      $("finalTitle").textContent = typeof f.title === "function" ? f.title(name) : f.title;
+      $("finalText").textContent  = f.text;
+
+      copyPayload = typeof f.copy === "function" ? f.copy(name) : f.copy;
+      $("copyBtn").dataset.copy = copyPayload;
+
+      setActiveScene(5);
+      spawnHearts(18);
+    }
+
+    // =============================
+    // Render text/buttons from CONFIG
+    // =============================
+    function render(){
+      const name = CONFIG.name;
+
+      // scene 1
+      $("s1Title").textContent = CONFIG.s1.title(name);
+      $("s1Text").textContent  = CONFIG.s1.text;
+      $("s1b1").textContent = CONFIG.s1.b1.label;
+      $("s1b2").textContent = CONFIG.s1.b2.label;
+
+      // scene 2
+      $("s2Title").textContent = CONFIG.s2.title(name);
+      $("s2Text").textContent  = CONFIG.s2.text;
+      $("s2b1").textContent = CONFIG.s2.b1.label;
+      $("s2b2").textContent = CONFIG.s2.b2.label;
+
+      // scene 3
+      $("s3Title").textContent = CONFIG.s3.title;
+      $("s3Text").textContent  = CONFIG.s3.text;
+      $("s3b1").textContent = CONFIG.s3.b1.label;
+      $("s3b2").textContent = CONFIG.s3.b2.label;
+      $("s3b3").textContent = CONFIG.s3.b3.label;
+
+      // scene 4
+      $("s4Title").textContent = CONFIG.s4.title;
+      $("s4Text").textContent  = CONFIG.s4.text;
+      $("s4b1").textContent = CONFIG.s4.b1.label;
+      $("s4b2").textContent = CONFIG.s4.b2.label;
+      $("s4b3").textContent = CONFIG.s4.b3.label;
+    }
+    render();
+
+    // =============================
+    // Wire actions
+    // =============================
+
+    // Scene 1 -> 2
+    $("s1b1").addEventListener("click", () => setActiveScene(CONFIG.s1.b1.next));
+    $("s1b2").addEventListener("click", () => setActiveScene(CONFIG.s1.b2.next));
+
+    // Scene 2 -> 3
+    $("s2b1").addEventListener("click", () => setActiveScene(CONFIG.s2.b1.next));
+    $("s2b2").addEventListener("click", () => setActiveScene(CONFIG.s2.b2.next));
+
+    // Scene 3 actions
+    $("s3b1").addEventListener("click", () => {
+      // go choose format
+      setActiveScene(4);
+    });
+
+    $("s3b2").addEventListener("click", () => goFinal("pickDay"));
+    $("s3b3").addEventListener("click", () => goFinal("soft"));
+
+    // Scene 4 picks -> finals
+    $("s4b1").addEventListener("click", () => goFinal("coffee"));
+    $("s4b2").addEventListener("click", () => goFinal("walk"));
+    $("s4b3").addEventListener("click", () => goFinal("cinema"));
+
+    // Copy
+    $("copyBtn").addEventListener("click", async () => {
+      const text = $("copyBtn").dataset.copy || copyPayload || (CONFIG.finals.yes.copy(CONFIG.name));
+      try{
+        await navigator.clipboard.writeText(text);
+        $("copyBtn").textContent = "Скопировано!";
+        setTimeout(()=> $("copyBtn").textContent = "Скопировать", 900);
+      }catch{
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        ta.remove();
+        $("copyBtn").textContent = "Скопировано!";
+        setTimeout(()=> $("copyBtn").textContent = "Скопировать", 900);
+      }
+    });
+
+    // Restart
+    $("restartBtn").addEventListener("click", () => {
+      setActiveScene(1);
+      spawnHearts(12);
+    });
+
+    // start effect
+    setTimeout(()=>spawnHearts(10), 220);
+  </script>
+</body>
+</html>
