@@ -15,7 +15,7 @@
       --border: rgba(255,255,255,.18);
 
       --text: #f7f6ff;
-      --muted: rgba(255,255,255,.78);
+      --muted: rgba(255,255,255,.74);
 
       --btn: #ffffff;
       --btnText:#15121f;
@@ -108,7 +108,7 @@
       user-select:none;
     }
 
-    .stage{ position:relative; min-height:310px; }
+    .stage{ position:relative; min-height:320px; }
 
     .scene{
       position:absolute;
@@ -141,6 +141,7 @@
       color:var(--muted);
       font-size: clamp(14px, 2.2vw, 16px);
       line-height:1.5;
+      white-space: pre-wrap;
     }
 
     .btns{
@@ -160,6 +161,7 @@
       font-size:16px;
       transition: transform .12s ease, filter .18s ease, background .18s ease, opacity .18s ease;
       user-select:none;
+      min-width: 210px;
     }
     button:active{ transform: scale(.98); }
     button:hover{ filter: brightness(1.04); }
@@ -167,16 +169,14 @@
     .primary{
       background: var(--btn);
       color: var(--btnText);
-      min-width: 200px;
     }
     .ghost{
       background: var(--btnSoft);
       color: var(--btnSoftText);
       border:1px solid rgba(255,255,255,.18);
-      min-width: 200px;
     }
 
-    .hint{
+    .small{
       margin-top:12px;
       font-size:13px;
       color: rgba(255,255,255,.70);
@@ -230,10 +230,31 @@
       transform:translateX(-50%) translateY(0);
     }
 
+    /* runaway "No" */
+    .no-wrap{
+      position: relative;
+      width: 100%;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+    .runaway{
+      position: relative;
+      will-change: transform;
+    }
+    .runaway.shake{
+      animation: shake .18s linear;
+    }
+    @keyframes shake{
+      0%{ transform: translate(0,0); }
+      30%{ transform: translate(-2px,1px); }
+      60%{ transform: translate(2px,-1px); }
+      100%{ transform: translate(0,0); }
+    }
+
     @media (max-width: 520px){
       .card{ padding:20px; border-radius:22px; }
-      button{ min-width: 180px; }
-      .stage{ min-height: 380px; }
+      button{ min-width: 185px; }
+      .stage{ min-height: 400px; }
       .toast{ font-size:13px; }
     }
   </style>
@@ -245,7 +266,7 @@
   <div class="toast" id="toast"></div>
 
   <div class="wrap">
-    <div class="card" role="application" aria-label="Нежный мини-сайт">
+    <div class="card" role="application" aria-label="Мини-сайт">
       <div class="top">
         <div class="badge">💌</div>
       </div>
@@ -254,11 +275,10 @@
         <!-- 1 -->
         <section class="scene active" data-scene="1">
           <div>
-            <h1 id="s1Title"></h1>
-            <p id="s1Text"></p>
-            <div class="btns">
-              <button class="primary" id="s1b1"></button>
-              <button class="ghost" id="s1b2"></button>
+            <h1 id="q1Title"></h1>
+            <div class="btns no-wrap" id="q1Btns">
+              <button class="primary" id="q1Yes">Да</button>
+              <button class="ghost runaway" id="q1No">Нет</button>
             </div>
           </div>
         </section>
@@ -266,11 +286,10 @@
         <!-- 2 -->
         <section class="scene" data-scene="2">
           <div>
-            <h1 id="s2Title"></h1>
-            <p id="s2Text"></p>
+            <h1 id="q2Title"></h1>
             <div class="btns">
-              <button class="primary" id="s2b1"></button>
-              <button class="ghost" id="s2b2"></button>
+              <button class="primary" id="q2Yes">Да</button>
+              <button class="ghost" id="q2No">Нет</button>
             </div>
           </div>
         </section>
@@ -278,40 +297,25 @@
         <!-- 3 -->
         <section class="scene" data-scene="3">
           <div>
-            <h1 id="s3Title"></h1>
-            <p id="s3Text"></p>
+            <h1 id="q3Title"></h1>
             <div class="btns">
-              <button class="primary" id="s3b1"></button>
-              <button class="ghost" id="s3b2"></button>
-              <button class="ghost" id="s3b3"></button>
+              <button class="primary" id="q3Yes">Да</button>
+              <button class="ghost" id="q3Walk">Давай просто погуляем</button>
             </div>
           </div>
         </section>
 
-        <!-- 4 -->
+        <!-- 4: final -->
         <section class="scene" data-scene="4">
-          <div>
-            <h1 id="s4Title"></h1>
-            <p id="s4Text"></p>
-            <div class="btns">
-              <button class="primary" id="s4b1"></button>
-              <button class="ghost" id="s4b2"></button>
-              <button class="ghost" id="s4b3"></button>
-            </div>
-          </div>
-        </section>
-
-        <!-- 5 -->
-        <section class="scene" data-scene="5">
           <div>
             <h1 id="finalTitle"></h1>
             <p id="finalText"></p>
             <div class="btns">
               <button class="primary" id="copyBtn">Скопировать</button>
-              <button class="ghost" id="contactBtn">Написать мне в Telegram 💌</button>
+              <button class="ghost" id="tgBtn">Написать в Telegram</button>
               <button class="ghost" id="restartBtn">Ещё раз</button>
             </div>
-            <div class="hint" id="finalHint">Текст уже подготовлен 💗</div>
+            <div class="small" id="finalHint"></div>
           </div>
         </section>
       </div>
@@ -322,106 +326,61 @@
           <span class="dot" data-dot="2"></span>
           <span class="dot" data-dot="3"></span>
           <span class="dot" data-dot="4"></span>
-          <span class="dot" data-dot="5"></span>
         </div>
       </div>
     </div>
   </div>
 
   <script>
-    // =============================
-    // CONFIG — меняешь тут всё
-    // =============================
     const CONFIG = {
       name: "Рина",
-
       telegram: {
         url: "https://t.me/xnryyy_xnryyy",
-        buttonLabel: "Написать мне в Telegram 💌"
+        buttonLabel: "Написать в Telegram"
       },
-
-      s1: {
-        title: (name) => `${name}… можно признаться?`,
-        text:  "Можно сказать кое-что важное?",
-        b1: { label: "Да",     next: 2 },
-        b2: { label: "Да 💗",  next: 2 }
+      text: {
+        q1: "Я тебе нравлюсь?🙄",
+        q2: "Хмм… а чуть-чуть?😢",
+        q3: "Тогда так: пойдём на свидание?",
       },
-
-      s2: {
-        title: (name) => `${name}, ты мне правда нравишься.`,
-        text:  "Очень.",
-        b1: { label: "💗", next: 3 },
-        b2: { label: "💖", next: 3 }
-      },
-
-      s3: {
-        title: "Хочешь встретиться на неделе?",
-        text:  "Кофе или прогулка — как тебе комфортнее.",
-        b1: { label: "Да 💗", action: "goChoose" },
-        b2: { label: "Давай выберем день 💗", action: "goPickDayFinal" },
-        b3: { label: "Мне нужно время 🤍", action: "goSoftFinal" }
-      },
-
-      s4: {
-        title: "Тогда выбери формат 💗",
-        text:  "Что тебе ближе?",
-        b1: { label: "Кофе ☕",     pick: "coffee" },
-        b2: { label: "Прогулка 🌙", pick: "walk" },
-        b3: { label: "Кино 🎬",     pick: "cinema" }
-      },
-
       finals: {
-        pickDay: {
-          title: (name) => `💗 ${name}…`,
-          text:  "Скопируй и отправь — выберем день спокойно и красиво 🤍",
-          copy:  (name) => `${name}, давай выберем день 💗`,
-          hint:  "Текст уже подготовлен: «выбрать день» 💗"
-        },
-        soft: {
-          title: (name) => `🤍 ${name}`,
-          text:  "Спасибо за честность. Я просто рад(а), что сказал(а) тебе это.",
-          copy:  (name) => `${name}, спасибо… 🤍`,
-          hint:  "Текст уже подготовлен 🤍"
-        },
-        coffee: {
-          title: (name) => `💗 ${name}…`,
-          text:  "Скопируй и отправь — и я предложу пару вариантов времени 💌",
-          copy:  (name) => `${name}, давай кофе ☕💗`,
-          hint:  "Текст уже подготовлен: «кофе» ☕💗"
+        yesDate: {
+          title: "Ура!🥰",
+          text: (name) => `${name}, пойдём на свидание 💗`,
+          hint: "Текст подготовлен — можно отправить"
         },
         walk: {
-          title: (name) => `💗 ${name}…`,
-          text:  "Скопируй и отправь — и я предложу пару вариантов времени 💌",
-          copy:  (name) => `${name}, давай прогулку 🌙💗`,
-          hint:  "Текст уже подготовлен: «прогулка» 🌙💗"
+          title: "Ура!🥰",
+          text: (name) => `${name}, давай просто погуляем 🌙`,
+          hint: "Текст подготовлен — можно отправить"
         },
-        cinema: {
-          title: (name) => `💗 ${name}…`,
-          text:  "Скопируй и отправь — и я предложу пару вариантов времени 💌",
-          copy:  (name) => `${name}, давай кино 🎬💗`,
-          hint:  "Текст уже подготовлен: «кино» 🎬💗"
+        softNo: {
+          title: "Жаль(",
+          text: (name) => `${name}, но всё равно ты не перестанешь мне нравится🤍`,
+          hint: ""
         }
       }
     };
 
-    // =============================
-    // Helpers
-    // =============================
     const $ = (id) => document.getElementById(id);
     const scenes = [...document.querySelectorAll(".scene")];
     const dots = [...document.querySelectorAll(".dot")];
-    const fxLayer = document.getElementById("fx");
+    const fxLayer = $("fx");
     const toastEl = $("toast");
 
-    let copyPayload = "";
     let toastTimer = null;
+    let copyPayload = "";
+
+    // runaway state
+    let noJumps = 0;
+    const MAX_JUMPS = 20;
 
     function setActiveScene(id){
       scenes.forEach(s => s.classList.toggle("active", s.dataset.scene === String(id)));
       dots.forEach(d => d.classList.toggle("on", d.dataset.dot === String(id)));
     }
 
-    function spawnHearts(count = 12){
+    function spawnHearts(count = 10){
       const emojis = ["💗","💖","💘","💞","💓"];
       for(let i=0;i<count;i++){
         const el = document.createElement("div");
@@ -441,14 +400,14 @@
     document.addEventListener("click", (e) => {
       const btn = e.target.closest("button");
       if(!btn) return;
-      spawnHearts(10);
+      spawnHearts(8);
     });
 
     function showToast(message){
       toastEl.textContent = message;
       toastEl.classList.add("on");
       clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => toastEl.classList.remove("on"), 1800);
+      toastTimer = setTimeout(() => toastEl.classList.remove("on"), 1700);
     }
 
     async function safeCopy(text){
@@ -470,111 +429,120 @@
       }
     }
 
-    function goFinal(finalKey){
-      const f = CONFIG.finals[finalKey];
+    function goFinal(kind){
       const name = CONFIG.name;
+      const f = CONFIG.finals[kind];
 
-      $("finalTitle").textContent = f.title(name);
-      $("finalText").textContent  = f.text;
+      $("finalTitle").textContent = f.title;
+      copyPayload = f.text(name);
 
-      copyPayload = f.copy(name);
+      $("finalText").textContent  = copyPayload;
+      $("finalHint").textContent  = f.hint || "";
       $("copyBtn").dataset.copy = copyPayload;
 
-      $("contactBtn").textContent = CONFIG.telegram.buttonLabel;
-      $("finalHint").textContent = f.hint || "Текст уже подготовлен 💗";
+      $("tgBtn").textContent = CONFIG.telegram.buttonLabel;
 
-      setActiveScene(5);
+      setActiveScene(4);
       spawnHearts(18);
     }
 
-    // =============================
-    // Render
-    // =============================
-    function render(){
-      const name = CONFIG.name;
+    // ---- Runaway "No" on screen 1
+    function moveNoButton(){
+      const wrap = $("q1Btns");
+      const btn = $("q1No");
+      if(!wrap || !btn) return;
+      if(noJumps >= MAX_JUMPS) return;
 
-      $("s1Title").textContent = CONFIG.s1.title(name);
-      $("s1Text").textContent  = CONFIG.s1.text;
-      $("s1b1").textContent = CONFIG.s1.b1.label;
-      $("s1b2").textContent = CONFIG.s1.b2.label;
+      const wrapRect = wrap.getBoundingClientRect();
+      const btnRect = btn.getBoundingClientRect();
 
-      $("s2Title").textContent = CONFIG.s2.title(name);
-      $("s2Text").textContent  = CONFIG.s2.text;
-      $("s2b1").textContent = CONFIG.s2.b1.label;
-      $("s2b2").textContent = CONFIG.s2.b2.label;
+      const maxX = Math.max(0, wrapRect.width - btnRect.width);
+      const maxY = Math.max(0, 120);
 
-      $("s3Title").textContent = CONFIG.s3.title;
-      $("s3Text").textContent  = CONFIG.s3.text;
-      $("s3b1").textContent = CONFIG.s3.b1.label;
-      $("s3b2").textContent = CONFIG.s3.b2.label;
-      $("s3b3").textContent = CONFIG.s3.b3.label;
+      const x = Math.floor(Math.random() * (maxX + 1));
+      const y = Math.floor((Math.random() * (maxY * 2 + 1)) - maxY);
 
-      $("s4Title").textContent = CONFIG.s4.title;
-      $("s4Text").textContent  = CONFIG.s4.text;
-      $("s4b1").textContent = CONFIG.s4.b1.label;
-      $("s4b2").textContent = CONFIG.s4.b2.label;
-      $("s4b3").textContent = CONFIG.s4.b3.label;
+      btn.style.transform = `translate(${x}px, ${y}px)`;
 
-      $("contactBtn").textContent = CONFIG.telegram.buttonLabel;
+      noJumps += 1;
+
+      btn.classList.add("shake");
+      setTimeout(() => btn.classList.remove("shake"), 220);
+
+      if(noJumps === 2) btn.textContent = "Нет…";
+      if(noJumps === 3) btn.textContent = "Нет";
     }
-    render();
 
-    // =============================
-    // Wire actions
-    // =============================
-    // Scene 1 -> 2
-    $("s1b1").addEventListener("click", () => setActiveScene(CONFIG.s1.b1.next));
-    $("s1b2").addEventListener("click", () => setActiveScene(CONFIG.s1.b2.next));
+    // reset runaway when restarting / leaving scene
+    function resetRunaway(){
+      noJumps = 0;
+      const btn = $("q1No");
+      if(btn){
+        btn.textContent = "Нет";
+        btn.style.transform = "translate(0px, 0px)";
+      }
+    }
 
-    // Scene 2 -> 3
-    $("s2b1").addEventListener("click", () => setActiveScene(CONFIG.s2.b1.next));
-    $("s2b2").addEventListener("click", () => setActiveScene(CONFIG.s2.b2.next));
+    // render titles
+    $("q1Title").textContent = CONFIG.text.q1;
+    $("q2Title").textContent = CONFIG.text.q2;
+    $("q3Title").textContent = CONFIG.text.q3;
 
-    // Scene 3
-    $("s3b1").addEventListener("click", () => setActiveScene(4));
-    $("s3b2").addEventListener("click", () => goFinal("pickDay"));
-    $("s3b3").addEventListener("click", () => goFinal("soft"));
+    // Runaway events
+    $("q1No").addEventListener("mouseenter", moveNoButton);
+    $("q1No").addEventListener("touchstart", (e) => {
+      if(noJumps < MAX_JUMPS){
+        e.preventDefault();
+        moveNoButton();
+      }
+    }, { passive:false });
 
-    // Scene 4
-    $("s4b1").addEventListener("click", () => goFinal("coffee"));
-    $("s4b2").addEventListener("click", () => goFinal("walk"));
-    $("s4b3").addEventListener("click", () => goFinal("cinema"));
+    // wiring
+    $("q1Yes").addEventListener("click", () => { resetRunaway(); setActiveScene(3); });
 
-    // Copy
+    $("q1No").addEventListener("click", () => {
+      if(noJumps < MAX_JUMPS){
+        moveNoButton();
+        return;
+      }
+      setActiveScene(2);
+    });
+
+    $("q2Yes").addEventListener("click", () => setActiveScene(3));
+    $("q2No").addEventListener("click",  () => goFinal("softNo"));
+
+    $("q3Yes").addEventListener("click", () => goFinal("yesDate"));
+    $("q3Walk").addEventListener("click", () => goFinal("walk"));
+
     $("copyBtn").addEventListener("click", async () => {
       const text = $("copyBtn").dataset.copy || copyPayload || "";
       const ok = await safeCopy(text);
-
       if(ok){
         $("copyBtn").textContent = "Скопировано!";
-        showToast("Текст скопирован 💗");
+        showToast("Текст скопирован");
         setTimeout(()=> $("copyBtn").textContent = "Скопировать", 900);
       }else{
-        showToast("Не получилось скопировать 😿");
+        showToast("Не получилось скопировать");
       }
     });
 
-    // Contact: copy + open tg + show toast
-    $("contactBtn").addEventListener("click", async () => {
+    $("tgBtn").addEventListener("click", async () => {
       const text = $("copyBtn").dataset.copy || copyPayload || "";
       const ok = await safeCopy(text);
-
       if(ok){
-        showToast("Текст скопирован — вставь в чат 💗");
+        showToast("Текст скопирован — вставь в чат");
       }else{
-        showToast("Скопируй вручную кнопкой «Скопировать» 🤍");
+        showToast("Скопируй вручную кнопкой «Скопировать»");
       }
-
       window.open(CONFIG.telegram.url, "_blank", "noopener");
     });
 
-    // Restart
     $("restartBtn").addEventListener("click", () => {
+      resetRunaway();
       setActiveScene(1);
-      spawnHearts(12);
+      spawnHearts(10);
     });
 
-    // start effect
     setTimeout(()=>spawnHearts(10), 220);
   </script>
 </body>
